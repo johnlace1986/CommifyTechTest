@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CommifyTechTest.Persistence.Models;
 internal class Employee
@@ -13,5 +14,6 @@ internal class Employee
     [Column(TypeName = "DATE")]
     public DateTime BirthDate { get; set; }
 
-    public decimal AnnualIncome { get; set; }
+    [NotNull]
+    public decimal? AnnualIncome { get; set; }
 }

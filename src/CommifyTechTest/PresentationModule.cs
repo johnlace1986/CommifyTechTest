@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using CommifyTechTest.Jobs;
+using CommifyTechTest.Services;
 using MediatR;
 using Quartz;
 using Quartz.Impl;
@@ -24,5 +25,7 @@ public class PresentationModule : Module
         })
         .As<IScheduler>()
         .SingleInstance();
+
+        builder.RegisterType<EmployeesParser>().As<IEmployeesParser>();
     }
 }

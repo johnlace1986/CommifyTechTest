@@ -2,8 +2,9 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommifyTechTest;
 using CommifyTechTest.Application;
+using CommifyTechTest.Application.Settings;
 using CommifyTechTest.Persistence;
-using CommifyTechTest.Services;
+using Microsoft.Extensions.Options;
 using Quartz;
 using Quartz.AspNetCore;
 using System.Reflection;
@@ -22,7 +23,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>(
         containerBuilder.RegisterModule(new ApplicationModule());
     });
 
-builder.Services.AddSingleton<IEmployeesParser, EmployeesParser>();
+builder.Services.Configure<TaxBandSettings>(builder.Configuration.GetSection("TaxBandSettings"));
+builder.Services.AddSingleton(sp => sp.GetService<IOptions<TaxBandSettings>>().Value);
 
 builder.Services.AddQuartz();
 builder.Services.AddQuartzServer();
