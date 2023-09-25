@@ -1,4 +1,11 @@
+using Autofac.Extensions.DependencyInjection;
+using CommifyTechTest.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+builder.Services.AddSingleton<IEmployeesParser, EmployeesParser>();
 
 // Add services to the container.
 
