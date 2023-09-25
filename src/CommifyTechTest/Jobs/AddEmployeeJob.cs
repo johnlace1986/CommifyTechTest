@@ -1,5 +1,5 @@
 ﻿using CommifyTechTest.Application.Commands;
-using CommifyTechTest.Services;
+using CommifyTechTest.Contracts;
 using MediatR;
 using Quartz;
 
@@ -18,20 +18,22 @@ public class AddEmployeeJob : IJob
 
     public static string GenerateJobKey(int employeeId) => $"{nameof(AddEmployeeJob)}-{employeeId}-{Guid.NewGuid()}";
 
-    public Task Execute(IJobExecutionContext context)
+    public async Task Execute(IJobExecutionContext context)
     {
         Console.WriteLine($"Executing {nameof(AddEmployeeJob)}...");
 
         var employee = context
             .JobDetail
             .JobDataMap
-            .Get("employee") as IEmployeesParser.Employee;
+            .Get("employee") as Employee;
 
         var cts = new CancellationTokenSource();
-        return _mediator.Send(CreatedAddEmployeeCommand(employee), cts.Token);
+        await _mediator.Send(CreatedAddEmployeeCommand(employee), cts.Token);
+
+        Console.WriteLine($"Executed {nameof(AddEmployeeJob)}.");
     }
 
-    private static AddEmployeeCommand CreatedAddEmployeeCommand(IEmployeesParser.Employee employee) =>
+    private static AddEmployeeCommand CreatedAddEmployeeCommand(Employee employee) =>
         new()
         {
             EmployeeID = employee.EmployeeID,

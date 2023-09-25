@@ -1,4 +1,5 @@
-﻿using CommifyTechTest.Jobs;
+﻿using CommifyTechTest.Contracts;
+using CommifyTechTest.Jobs;
 using CommifyTechTest.Services;
 using Microsoft.AspNetCore.Mvc;
 using Quartz;
@@ -19,10 +20,19 @@ public class EmployeesController : Controller
     }
 
     [HttpPost]
-    [Route("[controller]/file")]
-    public async Task<IActionResult> AddEmployeesAsync([FromForm(Name = "file")] IFormFile file, CancellationToken cancellationToken)
+    [Route("[controller]")]
+    public async Task<IActionResult> LoadFromBodyAsync([FromBody] IEnumerable<Employee> employees, CancellationToken cancellationToken)
     {
-        IEnumerable<IEmployeesParser.Employee> employees;
+        await TriggerJobs(employees);
+
+        return Accepted();
+    }
+
+    [HttpPost]
+    [Route("[controller]/file")]
+    public async Task<IActionResult> LoadFromFormDataAsync([FromForm(Name = "file")] IFormFile file, CancellationToken cancellationToken)
+    {
+        IEnumerable<Employee> employees;
 
         try
         {
@@ -40,7 +50,7 @@ public class EmployeesController : Controller
         return Accepted();
     }
 
-    private async Task TriggerJobs(IEnumerable<IEmployeesParser.Employee> employees)
+    private async Task TriggerJobs(IEnumerable<Employee> employees)
     {
         foreach (var employee in employees)
         {

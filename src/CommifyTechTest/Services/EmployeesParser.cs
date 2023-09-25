@@ -1,22 +1,24 @@
-﻿namespace CommifyTechTest.Services;
+﻿using CommifyTechTest.Contracts;
+
+namespace CommifyTechTest.Services;
 
 public class EmployeesParser : IEmployeesParser
 {
-    public async Task<IEnumerable<IEmployeesParser.Employee>> ParseAsync(Stream stream, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Employee>> ParseAsync(Stream stream, CancellationToken cancellationToken)
     {
         using var streamReader = new StreamReader(stream);
 
         //header row
         await streamReader.ReadLineAsync();
 
-        var employees = new List<IEmployeesParser.Employee>();
+        var employees = new List<Employee>();
 
         while (streamReader.EndOfStream is false)
         {
             var line = await streamReader.ReadLineAsync();
             var parts = line.Split(',');
 
-            employees.Add(new IEmployeesParser.Employee
+            employees.Add(new Employee
             {
                 EmployeeID = int.Parse(parts[0]),
                 FirstName = parts[1],

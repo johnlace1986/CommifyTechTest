@@ -21,6 +21,8 @@ internal class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand>
 
     public async Task Handle(AddEmployeeCommand command, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"Executing {nameof(AddEmployeeCommandHandler)}...");
+
         var employee = await _repository.GetByIdAsync(command.EmployeeID, cancellationToken);
 
         if (employee is not null)
@@ -32,5 +34,7 @@ internal class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand>
         employee.CalculateAnnualIncome(command.GrossAnnualSalary, _taxBands);
 
         await _repository.AddEmployeeAsync(employee, cancellationToken);
+
+        Console.WriteLine($"Executed {nameof(AddEmployeeCommandHandler)}.");
     }
 }
