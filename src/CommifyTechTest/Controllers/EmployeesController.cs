@@ -1,21 +1,21 @@
-﻿using CommifyTechTest.Application.Commands;
+﻿using CommifyTechTest.Jobs;
 using CommifyTechTest.Services;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Quartz;
 
 namespace CommifyTechTest.Controllers;
 
 public class EmployeesController : Controller
 {
     private readonly IEmployeesParser _employeesParser;
-    private readonly IMediator _mediator;
+    private readonly IScheduler _scheduler;
 
     public EmployeesController(
         IEmployeesParser employeesParser,
-        IMediator mediator)
+        IScheduler scheduler)
     {
         _employeesParser = employeesParser;
-        _mediator = mediator;
+        _scheduler = scheduler;
     }
 
     [HttpPost]
@@ -35,21 +35,25 @@ public class EmployeesController : Controller
             return BadRequest();
         }
 
-        await Task.WhenAll(employees.Select(employee =>
-        {
-            return _mediator.Send(CreatedAddEmployeeCommand(employee), cancellationToken);
-        }));
+        await TriggerJob(employees);
 
-        return Ok();
+        return Accepted();
     }
 
-    private static AddEmployeeCommand CreatedAddEmployeeCommand(IEmployeesParser.Employee employee) =>
-        new()
-        {
-            EmployeeID = employee.EmployeeID,
-            FirstName = employee.FirstName,
-            LastName = employee.LastName,
-            DateOfBirth = employee.DateOfBirth,
-            GrossAnnualSalary = employee.GrossAnnualSalary
-        };
+    private async Task TriggerJob(IEnumerable<IEmployeesParser.Employee> employees)
+    {
+        var jobKey = new JobKey(AddEmployeesJob.GenerateJobKey(), AddEmployeesJob.GroupKey);
+
+        var job = JobBuilder
+            .Create<AddEmployeesJob>()
+            .WithIdentity(jobKey)
+            .SetJobData(new JobDataMap
+            {
+                { "employees", employees }
+            })
+            .Build();
+
+        await _scheduler.AddJob(job, replace: true, storeNonDurableWhileAwaitingScheduling: true);
+        await _scheduler.TriggerJob(jobKey);
+    }
 }

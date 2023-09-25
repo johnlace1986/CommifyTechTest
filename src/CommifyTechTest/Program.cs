@@ -1,7 +1,12 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CommifyTechTest;
 using CommifyTechTest.Application;
+using CommifyTechTest.Jobs;
 using CommifyTechTest.Services;
+using Quartz;
+using Quartz.AspNetCore;
+using Quartz.Impl;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,10 +18,14 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(
     containerBuilder =>
     {
+        containerBuilder.RegisterModule(new PresentationModule());
         containerBuilder.RegisterModule(new ApplicationModule());
     });
 
 builder.Services.AddSingleton<IEmployeesParser, EmployeesParser>();
+
+builder.Services.AddQuartz();
+builder.Services.AddQuartzServer();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
