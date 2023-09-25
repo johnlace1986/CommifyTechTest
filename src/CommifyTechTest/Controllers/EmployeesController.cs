@@ -21,15 +21,6 @@ public class EmployeesController : Controller
 
     [HttpPost]
     [Route("[controller]")]
-    public async Task<IActionResult> LoadFromBodyAsync([FromBody] IEnumerable<Employee> employees, CancellationToken cancellationToken)
-    {
-        await TriggerJobs(employees);
-
-        return Accepted();
-    }
-
-    [HttpPost]
-    [Route("[controller]/file")]
     public async Task<IActionResult> LoadFromFormDataAsync([FromForm(Name = "file")] IFormFile file, CancellationToken cancellationToken)
     {
         IEnumerable<Employee> employees;
