@@ -23,6 +23,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommifyTechTest.Domain.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommifyTechTest.FunctionalTests", "tests\CommifyTechTest.FunctionalTests\CommifyTechTest.FunctionalTests.csproj", "{4FC0BD31-6A1D-4E29-8A30-7E7B7255618A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{B15CC1F4-C1C2-411F-87EB-B722BE6C543D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		employee_data.csv = employee_data.csv
+		employee_data_single.csv = employee_data_single.csv
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
