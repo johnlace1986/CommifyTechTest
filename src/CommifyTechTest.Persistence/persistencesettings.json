@@ -1,0 +1,5 @@
+{
+  "sql": {
+    "connectionString": "Server=localhost;Database=CommifyTechTest;Trusted_Connection=True;Encrypt=False"
+  }
+}

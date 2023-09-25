@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CommifyTechTest.Persistence.Models;
+﻿using CommifyTechTest.Persistence.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace CommifyTechTest.Persistence;
 
@@ -15,8 +16,13 @@ internal class PersistenceContext : DbContext
     {
         if (optionsBuilder.IsConfigured is false)
         {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("persistencesettings.json")
+                .Build();
+
             optionsBuilder.UseSqlServer(
-                connectionString: "Server=localhost;Database=CommifyTechTest;Trusted_Connection=True;Encrypt=False");
+                connectionString: configuration.GetSection("sql:connectionString").Value);
         }
 
         base.OnConfiguring(optionsBuilder);

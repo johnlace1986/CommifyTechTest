@@ -21,4 +21,12 @@
     <ProjectReference Include="..\CommifyTechTest.Application\CommifyTechTest.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="persistencesettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -29,16 +29,16 @@ public class Employee
     public void CalculateAnnualIncome(decimal grossAnnualIncome, IEnumerable<TaxBand> taxBands)
     {
         var tax = 0M;
-        var workingSalary = grossAnnualIncome;
+        var workingIncome = grossAnnualIncome;
 
-        foreach (var taxBand in taxBands)
+        foreach (var taxBand in taxBands.OrderByDescending(taxBand => taxBand.LowerLimit))
         {
-            if (workingSalary > taxBand.LowerLimit)
+            if (workingIncome > taxBand.LowerLimit)
             {
-                var taxable = workingSalary - taxBand.LowerLimit;
+                var taxable = workingIncome - taxBand.LowerLimit;
                 tax += taxable * (taxBand.TaxRate / 100M);
 
-                workingSalary = taxBand.LowerLimit;
+                workingIncome = taxBand.LowerLimit;
             }
         }
 

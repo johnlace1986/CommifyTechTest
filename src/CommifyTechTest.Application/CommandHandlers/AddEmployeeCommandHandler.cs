@@ -25,8 +25,7 @@ internal class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand>
 
         if (employee is not null)
         {
-            //do something
-            return;
+            throw new InvalidOperationException($"Employee {command.EmployeeID} already exists.");
         }
 
         employee = new Domain.AggregateRoots.Employee(command.EmployeeID, command.FirstName, command.LastName, command.DateOfBirth);
