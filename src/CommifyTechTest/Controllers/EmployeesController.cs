@@ -1,4 +1,6 @@
-﻿using CommifyTechTest.Services;
+﻿using CommifyTechTest.Application.Commands;
+using CommifyTechTest.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommifyTechTest.Controllers;
@@ -6,11 +8,14 @@ namespace CommifyTechTest.Controllers;
 public class EmployeesController : Controller
 {
     private readonly IEmployeesParser _employeesParser;
+    private readonly IMediator _mediator;
 
     public EmployeesController(
-        IEmployeesParser employeesParser)
+        IEmployeesParser employeesParser,
+        IMediator mediator)
     {
         _employeesParser = employeesParser;
+        _mediator = mediator;
     }
 
     [HttpPost]
@@ -30,6 +35,21 @@ public class EmployeesController : Controller
             return BadRequest();
         }
 
+        await Task.WhenAll(employees.Select(employee =>
+        {
+            return _mediator.Send(CreatedAddEmployeeCommand(employee), cancellationToken);
+        }));
+
         return Ok();
     }
+
+    private static AddEmployeeCommand CreatedAddEmployeeCommand(IEmployeesParser.Employee employee) =>
+        new()
+        {
+            EmployeeID = employee.EmployeeID,
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            DateOfBirth = employee.DateOfBirth,
+            GrossAnnualSalary = employee.GrossAnnualSalary
+        };
 }
