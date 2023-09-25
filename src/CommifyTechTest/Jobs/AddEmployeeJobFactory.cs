@@ -5,17 +5,17 @@ using Quartz.Spi;
 
 namespace CommifyTechTest.Jobs;
 
-public class AddEmployeesJobFactory : PropertySettingJobFactory
+public class AddEmployeeJobFactory : PropertySettingJobFactory
 {
     private readonly IMediator _mediator;
 
-    public AddEmployeesJobFactory(IMediator mediator)
+    public AddEmployeeJobFactory(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     public override IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
     {
-        return new AddEmployeesJob(_mediator);
+        return new AddEmployeeJob(_mediator);
     }
 }

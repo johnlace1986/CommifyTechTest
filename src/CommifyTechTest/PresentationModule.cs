@@ -17,7 +17,7 @@ public class PresentationModule : Module
             var mediator = context.Resolve<IMediator>();
 
             var scheduler = StdSchedulerFactory.GetDefaultScheduler().GetAwaiter().GetResult();
-            scheduler.JobFactory = new AddEmployeesJobFactory(mediator);
+            scheduler.JobFactory = new AddEmployeeJobFactory(mediator);
             scheduler.Start().GetAwaiter().GetResult();
 
             return scheduler;

@@ -17,4 +17,8 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CommifyTechTest.Application\CommifyTechTest.Application.csproj" />
+  </ItemGroup>
+
 </Project>

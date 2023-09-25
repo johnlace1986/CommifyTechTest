@@ -2,11 +2,10 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommifyTechTest;
 using CommifyTechTest.Application;
-using CommifyTechTest.Jobs;
+using CommifyTechTest.Persistence;
 using CommifyTechTest.Services;
 using Quartz;
 using Quartz.AspNetCore;
-using Quartz.Impl;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +18,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(
     containerBuilder =>
     {
         containerBuilder.RegisterModule(new PresentationModule());
+        containerBuilder.RegisterModule(new PersistenceModule());
         containerBuilder.RegisterModule(new ApplicationModule());
     });
 

@@ -5,33 +5,30 @@ using Quartz;
 
 namespace CommifyTechTest.Jobs;
 
-public class AddEmployeesJob : IJob
+public class AddEmployeeJob : IJob
 {
     public const string GroupKey = "JobGroups";
 
     private readonly IMediator _mediator;
 
-    public AddEmployeesJob(IMediator mediator)
+    public AddEmployeeJob(IMediator mediator)
     {
         _mediator = mediator;
     }
 
-    public static string GenerateJobKey() => $"{nameof(AddEmployeesJob)}-{Guid.NewGuid()}";
+    public static string GenerateJobKey(int employeeId) => $"{nameof(AddEmployeeJob)}-{employeeId}-{Guid.NewGuid()}";
 
     public Task Execute(IJobExecutionContext context)
     {
-        Console.WriteLine($"Executing {nameof(AddEmployeesJob)}...");
+        Console.WriteLine($"Executing {nameof(AddEmployeeJob)}...");
 
-        var employees = context
+        var employee = context
             .JobDetail
             .JobDataMap
-            .Get("employees") as IEnumerable<IEmployeesParser.Employee>;
+            .Get("employee") as IEmployeesParser.Employee;
 
-        return Task.WhenAll(employees.Select(employee =>
-        {
-            var cts = new CancellationTokenSource();
-            return _mediator.Send(CreatedAddEmployeeCommand(employee), cts.Token);
-        }));
+        var cts = new CancellationTokenSource();
+        return _mediator.Send(CreatedAddEmployeeCommand(employee), cts.Token);
     }
 
     private static AddEmployeeCommand CreatedAddEmployeeCommand(IEmployeesParser.Employee employee) =>

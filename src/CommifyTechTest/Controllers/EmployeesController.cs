@@ -35,25 +35,28 @@ public class EmployeesController : Controller
             return BadRequest();
         }
 
-        await TriggerJob(employees);
+        await TriggerJobs(employees);
 
         return Accepted();
     }
 
-    private async Task TriggerJob(IEnumerable<IEmployeesParser.Employee> employees)
+    private async Task TriggerJobs(IEnumerable<IEmployeesParser.Employee> employees)
     {
-        var jobKey = new JobKey(AddEmployeesJob.GenerateJobKey(), AddEmployeesJob.GroupKey);
+        foreach (var employee in employees)
+        {
+            var jobKey = new JobKey(AddEmployeeJob.GenerateJobKey(employee.EmployeeID), AddEmployeeJob.GroupKey);
 
-        var job = JobBuilder
-            .Create<AddEmployeesJob>()
-            .WithIdentity(jobKey)
-            .SetJobData(new JobDataMap
-            {
-                { "employees", employees }
-            })
-            .Build();
+            var job = JobBuilder
+                .Create<AddEmployeeJob>()
+                .WithIdentity(jobKey)
+                .SetJobData(new JobDataMap
+                {
+                    ["employee"] = employee
+                })
+                .Build();
 
-        await _scheduler.AddJob(job, replace: true, storeNonDurableWhileAwaitingScheduling: true);
-        await _scheduler.TriggerJob(jobKey);
+            await _scheduler.AddJob(job, replace: true, storeNonDurableWhileAwaitingScheduling: true);
+            await _scheduler.TriggerJob(jobKey);
+        }
     }
 }
