@@ -4,7 +4,7 @@ namespace CommifyTechTest.Application.Commands;
 
 public class AddEmployeeCommand : IRequest
 {
-    public int EmployeeID { get; set; }
+    public int Id { get; set; }
 
     public string FirstName { get; set; }
 

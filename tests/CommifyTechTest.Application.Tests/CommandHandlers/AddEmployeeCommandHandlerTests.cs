@@ -27,7 +27,7 @@ public class AddEmployeeCommandHandlerTests
                 TaxBands = Enumerable.Empty<TaxBand>()
             });
 
-        var work = async () => await sut.Handle(new AddEmployeeCommand { EmployeeID = 1 }, CancellationToken.None);
+        var work = async () => await sut.Handle(new AddEmployeeCommand { Id = 1 }, CancellationToken.None);
 
         await work.Should().ThrowAsync<InvalidOperationException>();
     }
@@ -37,7 +37,7 @@ public class AddEmployeeCommandHandlerTests
     {
         var command = new AddEmployeeCommand
         {
-            EmployeeID = 1,
+            Id = 1,
             FirstName = "John",
             LastName = "Smith",
             DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -58,10 +58,10 @@ public class AddEmployeeCommandHandlerTests
         await sut.Handle(command, CancellationToken.None);
 
         repositoryMock.Verify(mock => mock.AddEmployeeAsync(It.Is<Employee>(employee =>
-            employee.Id == command.EmployeeID &&
+            employee.Id == command.Id &&
             employee.FirstName == command.FirstName &&
             employee.LastName == command.LastName &&
             employee.DateOfBirth == command.DateOfBirth &&
-            employee.AnnualIncome == command.GrossAnnualSalary), It.IsAny<CancellationToken>()), Times.Once);
+            employee.NetAnnualSalary == command.GrossAnnualSalary), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

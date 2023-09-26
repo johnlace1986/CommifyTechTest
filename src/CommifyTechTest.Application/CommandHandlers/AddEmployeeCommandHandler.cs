@@ -23,15 +23,15 @@ internal class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand>
     {
         Console.WriteLine($"Executing {nameof(AddEmployeeCommandHandler)}...");
 
-        var employee = await _repository.GetByIdAsync(command.EmployeeID, cancellationToken);
+        var employee = await _repository.GetByIdAsync(command.Id, cancellationToken);
 
         if (employee is not null)
         {
-            throw new InvalidOperationException($"Employee {command.EmployeeID} already exists.");
+            throw new InvalidOperationException($"Employee {command.Id} already exists.");
         }
 
-        employee = new Domain.AggregateRoots.Employee(command.EmployeeID, command.FirstName, command.LastName, command.DateOfBirth);
-        employee.CalculateAnnualIncome(command.GrossAnnualSalary, _taxBands);
+        employee = new Domain.AggregateRoots.Employee(command.Id, command.FirstName, command.LastName, command.DateOfBirth);
+        employee.CalculateNetAnnualSalary(command.GrossAnnualSalary, _taxBands);
 
         await _repository.AddEmployeeAsync(employee, cancellationToken);
 

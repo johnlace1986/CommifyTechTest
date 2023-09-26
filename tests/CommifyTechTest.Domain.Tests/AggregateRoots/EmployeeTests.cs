@@ -15,11 +15,11 @@ public class EmployeeTests
 
     [TestCase(10000, 9000)]
     [TestCase(40000, 29000)]
-    public void CalculateAnnualIncome(int grossAnnualSalary, int annualIncome)
+    public void CalculateNetAnnualSalary(int grossAnnualSalary, int netAnnualSalary)
     {
         var employee = new Employee(1, "John", "Smith", DateOnly.FromDateTime(DateTime.UtcNow));
-        employee.CalculateAnnualIncome(grossAnnualSalary, _taxBands);
+        employee.CalculateNetAnnualSalary(grossAnnualSalary, _taxBands);
 
-        employee.AnnualIncome.Should().Be(annualIncome);
+        employee.NetAnnualSalary.Should().Be(netAnnualSalary);
     }
 }

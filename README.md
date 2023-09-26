@@ -1,6 +1,13 @@
 
 # Commify Tech Test
 
+This application can be used to load empoyee records into a HR system. It exposes a single `POST` endpoint which reads a file from the form data. This file is parsed into multiple employee records.
+
+The process for loading employees is ascynchronous. The `POST` endpoint will create background tasks for each employee found in the uploaded file and return a response once these tasks have been triggered but NOT completed. The reasons for this approach are:
+
+* It prevents an attempt to upload a large employee file from blocking the calling thread while is churns through all of the records
+* If there is an issue with a single employee record in the file, this will not adversely effect the others
+
 ## Database Creation
 
 This project uses Entity Framework Core as the ORM to talk to the underlying SQL Server database. To create the database before running the application for the first time, please follow these instructions:
@@ -32,4 +39,4 @@ The following lists the known issues that I did not have time to resolve before 
 
 * The unit of work is committed after each individual employee is added. It could be more performant to add all employees to the repository and then commit the unit of work at the end
 * The functional test project uses the same database as the locally running instance, causing the tests to potentially pollute the database
-* As the employees are added asynchronously, the functional test waits for 10 seconds before looking in the database to see if the employee was added. It is unlikely that it will take the full 10 seconds for the employee to be added so the functional test could proactively monitor the database and respond as soon as it's ready
+* As the employees are added asynchronously, the functional test waits for 5 seconds before looking in the database to see if the employee was added. It is unlikely that it will take the full 10 seconds for the employee to be added so the functional test could proactively monitor the database and respond as soon as it's ready

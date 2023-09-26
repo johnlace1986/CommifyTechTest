@@ -20,7 +20,7 @@ public class EmployeesParser : IEmployeesParser
 
             employees.Add(new Employee
             {
-                EmployeeID = int.Parse(parts[0]),
+                Id = int.Parse(parts[0]),
                 FirstName = parts[1],
                 LastName = parts[2],
                 DateOfBirth = DateOnly.Parse(parts[3]),

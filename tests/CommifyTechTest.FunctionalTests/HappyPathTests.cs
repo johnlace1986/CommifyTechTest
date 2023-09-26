@@ -18,7 +18,7 @@ public class HappyPathTests
 
     private readonly EmployeeContract _employee = new() 
     { 
-        EmployeeID = int.MaxValue, 
+        Id = int.MaxValue, 
         FirstName = "John", 
         LastName = "Smith", 
         DateOfBirth = new DateOnly(1986, 10, 1), 
@@ -55,15 +55,15 @@ public class HappyPathTests
         {
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Accepted);
 
-            await Task.Delay(TimeSpan.FromSeconds(10));
+            await Task.Delay(TimeSpan.FromSeconds(5));
 
             var context = new PersistenceContext();
-            var addedEmployee = await context.Employees.SingleOrDefaultAsync(employee => employee.EmployeeID == _employee.EmployeeID);
+            var addedEmployee = await context.Employees.SingleOrDefaultAsync(employee => employee.EmployeeID == _employee.Id);
 
             addedEmployee.Should().NotBeNull()
                 .And.Subject.As<EmployeeDataModel>().Should().BeEquivalentTo(new EmployeeDataModel
                 {
-                    EmployeeID = _employee.EmployeeID,
+                    EmployeeID = _employee.Id,
                     FirstName = _employee.FirstName,
                     LastName = _employee.LastName,
                     BirthDate = _employee.DateOfBirth.ToDateTime(TimeOnly.MinValue),
@@ -77,7 +77,7 @@ public class HappyPathTests
     {
         var context = new PersistenceContext();
 
-        var addedEmployee = await context.Employees.SingleOrDefaultAsync(employee => employee.EmployeeID == _employee.EmployeeID);
+        var addedEmployee = await context.Employees.SingleOrDefaultAsync(employee => employee.EmployeeID == _employee.Id);
 
         if (addedEmployee is not null)
         {
@@ -95,7 +95,7 @@ public class HappyPathTests
 
         foreach (var employee in employees)
         {
-            await writer.WriteLineAsync($"{employee.EmployeeID},{employee.FirstName},{employee.LastName},{employee.DateOfBirth},{employee.GrossAnnualSalary}");
+            await writer.WriteLineAsync($"{employee.Id},{employee.FirstName},{employee.LastName},{employee.DateOfBirth},{employee.GrossAnnualSalary}");
         }
 
         await writer.FlushAsync();

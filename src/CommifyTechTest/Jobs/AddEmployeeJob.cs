@@ -36,7 +36,7 @@ public class AddEmployeeJob : IJob
     private static AddEmployeeCommand CreatedAddEmployeeCommand(Employee employee) =>
         new()
         {
-            EmployeeID = employee.EmployeeID,
+            Id = employee.Id,
             FirstName = employee.FirstName,
             LastName = employee.LastName,
             DateOfBirth = employee.DateOfBirth,

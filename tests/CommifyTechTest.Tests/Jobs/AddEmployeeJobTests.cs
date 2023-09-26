@@ -20,7 +20,7 @@ public class AddEmployeeJobTests
     {
         var employee = new Employee
         {
-            EmployeeID = 1,
+            Id = 1,
             FirstName = "John",
             LastName = "Smith",
             DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -37,7 +37,7 @@ public class AddEmployeeJobTests
         await sut.Execute(context);
 
         mediatorMock.Verify(mock => mock.Send(It.Is<AddEmployeeCommand>(command =>
-            command.EmployeeID == employee.EmployeeID &&
+            command.Id == employee.Id &&
             command.FirstName == employee.FirstName &&
             command.LastName == employee.LastName &&
             command.DateOfBirth == employee.DateOfBirth &&

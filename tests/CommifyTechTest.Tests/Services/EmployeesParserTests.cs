@@ -14,7 +14,7 @@ public class EmployeesParserTests
     {
         var expectedEmployee = new Employee
         {
-            EmployeeID = 1,
+            Id = 1,
             FirstName = "John",
             LastName = "Smith",
             DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -23,7 +23,7 @@ public class EmployeesParserTests
 
         var builder = new StringBuilder();
         builder.AppendLine("EmployeeID,FirstName,LastName,DateOfBirth,GrossAnnualSalary");
-        builder.AppendLine($"{expectedEmployee.EmployeeID},{expectedEmployee.FirstName},{expectedEmployee.LastName},{expectedEmployee.DateOfBirth},{expectedEmployee.GrossAnnualSalary}");
+        builder.AppendLine($"{expectedEmployee.Id},{expectedEmployee.FirstName},{expectedEmployee.LastName},{expectedEmployee.DateOfBirth},{expectedEmployee.GrossAnnualSalary}");
 
         using var stream = new MemoryStream(Encoding.Default.GetBytes(builder.ToString()));
 
@@ -34,7 +34,7 @@ public class EmployeesParserTests
         using (new AssertionScope())
         {
             var parsedEmployee = result.Should().ContainSingle().Subject;
-            parsedEmployee.EmployeeID.Should().Be(expectedEmployee.EmployeeID);
+            parsedEmployee.Id.Should().Be(expectedEmployee.Id);
             parsedEmployee.FirstName.Should().Be(expectedEmployee.FirstName);
             parsedEmployee.LastName.Should().Be(expectedEmployee.LastName);
             parsedEmployee.DateOfBirth.Should().Be(expectedEmployee.DateOfBirth);

@@ -15,7 +15,7 @@ internal static class EmployeeMapper
             firstName: employee.FirstName,
             lastName: employee.LastName,
             dateOfBirth: DateOnly.FromDateTime(employee.BirthDate),
-            annualIncome: employee.AnnualIncome);
+            netAnnualSalary: employee.AnnualIncome);
     }
 
     public static PersistenceEmployee Map(DomainEmployee employee)
@@ -29,7 +29,7 @@ internal static class EmployeeMapper
             FirstName = employee.FirstName,
             LastName = employee.LastName,
             BirthDate = employee.DateOfBirth.ToDateTime(TimeOnly.MinValue),
-            AnnualIncome = employee.AnnualIncome
+            AnnualIncome = employee.NetAnnualSalary
         };
     }
 }

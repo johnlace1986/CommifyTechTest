@@ -45,7 +45,7 @@ public class EmployeesController : Controller
     {
         foreach (var employee in employees)
         {
-            var jobKey = new JobKey(AddEmployeeJob.GenerateJobKey(employee.EmployeeID), AddEmployeeJob.GroupKey);
+            var jobKey = new JobKey(AddEmployeeJob.GenerateJobKey(employee.Id), AddEmployeeJob.GroupKey);
 
             var job = JobBuilder
                 .Create<AddEmployeeJob>()

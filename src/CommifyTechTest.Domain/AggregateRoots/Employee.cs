@@ -10,38 +10,38 @@ public class Employee
 
     public DateOnly DateOfBirth { get; }
 
-    public decimal? AnnualIncome { get; set; }
+    public decimal? NetAnnualSalary { get; set; }
 
     public Employee(
         int id,
         string firstName,
         string lastName,
         DateOnly dateOfBirth,
-        decimal? annualIncome = null)
+        decimal? netAnnualSalary = null)
     {
         Id = id;
         FirstName = firstName;
         LastName = lastName;
         DateOfBirth = dateOfBirth;
-        AnnualIncome = annualIncome;
+        NetAnnualSalary = netAnnualSalary;
     }
 
-    public void CalculateAnnualIncome(decimal grossAnnualIncome, IEnumerable<TaxBand> taxBands)
+    public void CalculateNetAnnualSalary(decimal grossAnnualSalary, IEnumerable<TaxBand> taxBands)
     {
         var tax = 0M;
-        var workingIncome = grossAnnualIncome;
+        var workingSalary = grossAnnualSalary;
 
         foreach (var taxBand in taxBands.OrderByDescending(taxBand => taxBand.LowerLimit))
         {
-            if (workingIncome > taxBand.LowerLimit)
+            if (workingSalary > taxBand.LowerLimit)
             {
-                var taxable = workingIncome - taxBand.LowerLimit;
+                var taxable = workingSalary - taxBand.LowerLimit;
                 tax += taxable * (taxBand.TaxRate / 100M);
 
-                workingIncome = taxBand.LowerLimit;
+                workingSalary = taxBand.LowerLimit;
             }
         }
 
-        AnnualIncome = grossAnnualIncome - tax;
+        NetAnnualSalary = grossAnnualSalary - tax;
     }
 }

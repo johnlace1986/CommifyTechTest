@@ -35,7 +35,7 @@ internal class EmployeesControllerTests
     {
         var employees = new[]
         {
-            new Employee { EmployeeID = 1, FirstName = "John", LastName = "Smith", DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow), GrossAnnualSalary = 10000 }
+            new Employee { Id = 1, FirstName = "John", LastName = "Smith", DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow), GrossAnnualSalary = 10000 }
         };
 
         var employeesParserMock = new Mock<IEmployeesParser>();
